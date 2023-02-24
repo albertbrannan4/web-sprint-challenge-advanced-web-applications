@@ -22,7 +22,7 @@ export default function App() {
   const navigate = useNavigate();
   const redirectToLogin = () => {
     /* ✨ implement */
-    navigate("/login");
+    navigate("/");
   };
   const redirectToArticles = () => {
     /* ✨ implement */
@@ -35,6 +35,9 @@ export default function App() {
     // and a message saying "Goodbye!" should be set in its proper state.
     // In any case, we should redirect the browser back to the login screen,
     // using the helper above.
+    localStorage.clear();
+    setMessage("Goodbye!");
+    redirectToLogin();
   };
 
   const login = ({ username, password }) => {
@@ -111,7 +114,7 @@ export default function App() {
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
       <Spinner />
-      <Message />
+      <Message message={message} />
       <button id="logout" onClick={logout}>
         Logout from app
       </button>
@@ -132,17 +135,12 @@ export default function App() {
           <Route
             path="articles"
             element={
-              <>
+              <PrivateRoute isAuthenticated={localStorage.getItem("token")}>
                 <ArticleForm />
                 <Articles articles={articles} getArticles={getArticles} />
-              </>
+              </PrivateRoute>
             }
           />
-          {/* <PrivateRoute
-            exact
-            path="articles"
-            component={(ArticleForm, Articles)}
-          /> */}
         </Routes>
         <footer>Bloom Institute of Technology 2022</footer>
       </div>
