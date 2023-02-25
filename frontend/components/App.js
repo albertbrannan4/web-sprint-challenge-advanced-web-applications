@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, Routes, Route, useNavigate } from "react-router-dom";
 import Articles from "./Articles";
 import LoginForm from "./LoginForm";
@@ -120,13 +120,14 @@ export default function App() {
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
-    let payload = { title: "foo", text: "bar", topic: "React" };
+
     setMessage("");
     setSpinnerOn(true);
     axiosWithAuth()
       .put(`http://localhost:9000/api/articles/${article_id}`, article)
       .then((res) => {
-        console.log(res);
+        const { message } = res.data;
+        setMessage(message);
       })
       .catch((err) => {
         console.error(err.response.data.message);
@@ -136,7 +137,7 @@ export default function App() {
         setSpinnerOn(false);
       });
   };
-  console.log(articles);
+
   const deleteArticle = (article_id) => {
     // ✨ implement
     axiosWithAuth()
@@ -144,9 +145,13 @@ export default function App() {
       .then((res) => {
         const { message } = res.data;
         setMessage(message);
+
         console.log(res);
+
+        redirectToArticles();
       })
       .catch((err) => {
+        getArticles();
         console.log(err);
       });
   };
@@ -187,6 +192,7 @@ export default function App() {
                   setCurrentArticleId={setCurrentArticleId}
                   currentArticleId={currentArticleId}
                   currentArticle={currentArticle[0]}
+                  getArticles={getArticles}
                 />
                 <Articles
                   articles={articles}
@@ -194,6 +200,7 @@ export default function App() {
                   deleteArticle={deleteArticle}
                   setCurrentArticleId={setCurrentArticleId}
                   currentArticleId={currentArticleId}
+                  setArticles={setArticles}
                 />
               </PrivateRoute>
             }

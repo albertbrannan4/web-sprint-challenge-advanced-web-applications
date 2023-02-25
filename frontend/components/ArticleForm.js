@@ -12,6 +12,9 @@ export default function ArticleForm(props) {
     currentArticleId,
     currentArticle,
   } = props;
+
+  useEffect(() => {}, []);
+
   useEffect(() => {
     // ✨ implement
     // Every time the `currentArticle` prop changes, we should check it for truthiness:
@@ -33,8 +36,8 @@ export default function ArticleForm(props) {
 
     if (currentArticleId === undefined) postArticle(values);
     if (currentArticleId !== undefined) {
-      console.log("put", values);
-      updateArticle(values);
+      updateArticle({ article: values, article_id: values.article_id });
+      setCurrentArticleId();
     }
     setValues(initialFormValues);
   };
