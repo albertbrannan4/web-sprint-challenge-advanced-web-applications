@@ -145,10 +145,6 @@ export default function App() {
       .then((res) => {
         const { message } = res.data;
         setMessage(message);
-
-        console.log(res);
-
-        redirectToArticles();
       })
       .catch((err) => {
         getArticles();
@@ -185,7 +181,8 @@ export default function App() {
           <Route
             path="articles"
             element={
-              <PrivateRoute isAuthenticated={localStorage.getItem("token")}>
+              <>
+                {/* // <PrivateRoute isAuthenticated={localStorage.getItem("token")}> */}
                 <ArticleForm
                   postArticle={postArticle}
                   updateArticle={updateArticle}
@@ -202,7 +199,8 @@ export default function App() {
                   currentArticleId={currentArticleId}
                   setArticles={setArticles}
                 />
-              </PrivateRoute>
+                {/* </PrivateRoute> */}
+              </>
             }
           />
         </Routes>
