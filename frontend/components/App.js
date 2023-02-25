@@ -120,24 +120,23 @@ export default function App() {
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
+    let payload = { title: "foo", text: "bar", topic: "React" };
     setMessage("");
     setSpinnerOn(true);
     axiosWithAuth()
-      .put(articlesUrl, { article_id, article })
+      .put(`http://localhost:9000/api/articles/${article_id}`, article)
       .then((res) => {
-        // const { message, articles } = res.data;
-        // setArticles(articles);
-        // setMessage(message);
         console.log(res);
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err.response.data.message);
+        setMessage(err.response.data.message);
       })
       .finally(() => {
         setSpinnerOn(false);
       });
   };
-
+  console.log(articles);
   const deleteArticle = (article_id) => {
     // ✨ implement
     axiosWithAuth()

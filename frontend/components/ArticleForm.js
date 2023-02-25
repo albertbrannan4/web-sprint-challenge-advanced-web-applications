@@ -30,7 +30,12 @@ export default function ArticleForm(props) {
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
-    postArticle(values);
+
+    if (currentArticleId === undefined) postArticle(values);
+    if (currentArticleId !== undefined) {
+      console.log("put", values);
+      updateArticle(values);
+    }
     setValues(initialFormValues);
   };
 
