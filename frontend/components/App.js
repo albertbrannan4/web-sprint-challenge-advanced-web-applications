@@ -140,6 +140,12 @@ export default function App() {
 
   const deleteArticle = (article_id) => {
     // ✨ implement
+    const NotCurrentArticle = articles.filter((each) => {
+      if (each.article_id !== article_id) {
+        return each;
+      }
+    });
+    setArticles(NotCurrentArticle);
     axiosWithAuth()
       .delete(`http://localhost:9000/api/articles/${article_id}`)
       .then((res) => {
@@ -149,7 +155,8 @@ export default function App() {
       .catch((err) => {
         getArticles();
         console.log(err);
-      });
+      })
+      .finally(() => {});
   };
 
   const currentArticle = articles.filter((each) => {
@@ -181,8 +188,7 @@ export default function App() {
           <Route
             path="articles"
             element={
-              <>
-                {/* // <PrivateRoute isAuthenticated={localStorage.getItem("token")}> */}
+              <PrivateRoute>
                 <ArticleForm
                   postArticle={postArticle}
                   updateArticle={updateArticle}
@@ -199,8 +205,7 @@ export default function App() {
                   currentArticleId={currentArticleId}
                   setArticles={setArticles}
                 />
-                {/* </PrivateRoute> */}
-              </>
+              </PrivateRoute>
             }
           />
         </Routes>

@@ -21,12 +21,6 @@ export default function Articles(props) {
   }, []);
 
   const deleteHandler = (id) => {
-    const NotCurrentArticle = articles.filter((each) => {
-      if (each.article_id !== id) {
-        return each;
-      }
-    });
-    setArticles(NotCurrentArticle);
     deleteArticle(id);
   };
   return (
