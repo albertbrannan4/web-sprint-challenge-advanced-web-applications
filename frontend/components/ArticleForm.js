@@ -5,14 +5,19 @@ const initialFormValues = { title: "", text: "", topic: "" };
 export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues);
   // ✨ where are my props? Destructure them here
-  const { updateArticle, postArticle, setCurrentArticleId, currentArticleId } =
-    props;
+  const {
+    updateArticle,
+    postArticle,
+    setCurrentArticleId,
+    currentArticleId,
+    currentArticle,
+  } = props;
   useEffect(() => {
     // ✨ implement
     // Every time the `currentArticle` prop changes, we should check it for truthiness:
     // if it's truthy, we should set its title, text and topic into the corresponding
     // values of the form. If it's not, we should reset the form back to initial values.
-    console.log(currentArticleId);
+    if (currentArticleId) setValues(currentArticle);
   }, [currentArticleId]);
 
   const onChange = (evt) => {
@@ -42,7 +47,7 @@ export default function ArticleForm(props) {
     // ✨ fix the JSX: make the heading display either "Edit" or "Create"
     // and replace Function.prototype with the correct function
     <form id="form" onSubmit={onSubmit}>
-      <h2>Create Article</h2>
+      <h2>{currentArticleId === undefined ? "Create" : "Edit"} Article</h2>
       <input
         maxLength={50}
         onChange={onChange}

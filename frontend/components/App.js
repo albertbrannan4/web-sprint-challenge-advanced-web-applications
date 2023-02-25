@@ -152,6 +152,10 @@ export default function App() {
       });
   };
 
+  const currentArticle = articles.filter((each) => {
+    return each.article_id === currentArticleId;
+  });
+
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
@@ -183,6 +187,7 @@ export default function App() {
                   updateArticle={updateArticle}
                   setCurrentArticleId={setCurrentArticleId}
                   currentArticleId={currentArticleId}
+                  currentArticle={currentArticle[0]}
                 />
                 <Articles
                   articles={articles}
