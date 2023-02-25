@@ -36,8 +36,8 @@ export default function App() {
     // In any case, we should redirect the browser back to the login screen,
     // using the helper above.
     localStorage.clear();
-    setMessage("Goodbye!");
     redirectToLogin();
+    setMessage("Goodbye!");
   };
 
   const login = ({ username, password }) => {
@@ -88,6 +88,7 @@ export default function App() {
       })
       .catch((err) => {
         console.error(err);
+        redirectToLogin();
       })
       .finally(() => {
         setSpinnerOn(false);
@@ -99,21 +100,62 @@ export default function App() {
     // The flow is very similar to the `getArticles` function.
     // You'll know what to do! Use log statements or breakpoints
     // to inspect the response from the server.
+    setMessage("");
+    setSpinnerOn(true);
+    axiosWithAuth()
+      .post(articlesUrl, article)
+      .then((res) => {
+        const { message, article } = res.data;
+        setMessage(message);
+        setArticles([...articles, article]);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setSpinnerOn(false);
+      });
   };
 
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
+    setMessage("");
+    setSpinnerOn(true);
+    axiosWithAuth()
+      .put(articlesUrl, { article_id, article })
+      .then((res) => {
+        // const { message, articles } = res.data;
+        // setArticles(articles);
+        // setMessage(message);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setSpinnerOn(false);
+      });
   };
 
   const deleteArticle = (article_id) => {
     // ✨ implement
+    axiosWithAuth()
+      .delete(`http://localhost:9000/api/articles/${article_id}`)
+      .then((res) => {
+        const { message } = res.data;
+        setMessage(message);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
-      <Spinner />
+      <Spinner on={spinnerOn} />
       <Message message={message} />
       <button id="logout" onClick={logout}>
         Logout from app
@@ -136,8 +178,19 @@ export default function App() {
             path="articles"
             element={
               <PrivateRoute isAuthenticated={localStorage.getItem("token")}>
-                <ArticleForm />
-                <Articles articles={articles} getArticles={getArticles} />
+                <ArticleForm
+                  postArticle={postArticle}
+                  updateArticle={updateArticle}
+                  setCurrentArticleId={setCurrentArticleId}
+                  currentArticleId={currentArticleId}
+                />
+                <Articles
+                  articles={articles}
+                  getArticles={getArticles}
+                  deleteArticle={deleteArticle}
+                  setCurrentArticleId={setCurrentArticleId}
+                  currentArticleId={currentArticleId}
+                />
               </PrivateRoute>
             }
           />
