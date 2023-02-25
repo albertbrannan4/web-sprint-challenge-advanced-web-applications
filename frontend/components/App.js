@@ -126,7 +126,13 @@ export default function App() {
     axiosWithAuth()
       .put(`http://localhost:9000/api/articles/${article_id}`, article)
       .then((res) => {
-        const { message } = res.data;
+        const { message, article } = res.data;
+        const UnEditedState = articles.filter((each) => {
+          if (each.article_id !== article_id) {
+            return each;
+          }
+        });
+        setArticles([article, ...UnEditedState]);
         setMessage(message);
       })
       .catch((err) => {
@@ -135,28 +141,28 @@ export default function App() {
       })
       .finally(() => {
         setSpinnerOn(false);
+        setCurrentArticleId();
       });
   };
 
   const deleteArticle = (article_id) => {
     // ✨ implement
-    const NotCurrentArticle = articles.filter((each) => {
-      if (each.article_id !== article_id) {
-        return each;
-      }
-    });
-    setArticles(NotCurrentArticle);
     axiosWithAuth()
       .delete(`http://localhost:9000/api/articles/${article_id}`)
       .then((res) => {
+        const NotCurrentArticle = articles.filter((each) => {
+          if (each.article_id !== article_id) {
+            return each;
+          }
+        });
+        setArticles(NotCurrentArticle);
         const { message } = res.data;
         setMessage(message);
       })
       .catch((err) => {
         getArticles();
         console.log(err);
-      })
-      .finally(() => {});
+      });
   };
 
   const currentArticle = articles.filter((each) => {

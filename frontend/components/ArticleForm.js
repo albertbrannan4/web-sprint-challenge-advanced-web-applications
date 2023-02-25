@@ -37,7 +37,6 @@ export default function ArticleForm(props) {
     if (currentArticleId === undefined) postArticle(values);
     if (currentArticleId !== undefined) {
       updateArticle({ article: values, article_id: values.article_id });
-      setCurrentArticleId();
     }
     setValues(initialFormValues);
   };
